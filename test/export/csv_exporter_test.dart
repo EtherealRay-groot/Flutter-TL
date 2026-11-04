@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:test/test.dart';
 import 'package:tl_app/core/protocol/logistics_info.dart';
 import 'package:tl_app/core/protocol/record_entry.dart';
@@ -50,7 +51,11 @@ void main() {
     expect(csv, contains('最低温度,15.00℃'));
     expect(csv, contains('平均温度,20.17℃'));
     expect(csv, contains('序号,时间,温度(℃),湿度(%)'));
-    expect(csv, contains('1,2023-11-15 '));
+    // CSV 按设备本地时区输出，测试不能依赖 CI 机器的时区。
+    final firstTime = DateFormat(
+      'yyyy-MM-dd HH:mm:ss',
+    ).format(DateTime.fromMillisecondsSinceEpoch(1700000000 * 1000));
+    expect(csv, contains('1,$firstTime,20.00,40'));
   });
 
   test('fahrenheit conversion', () {
