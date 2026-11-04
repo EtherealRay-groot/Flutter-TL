@@ -1,0 +1,30 @@
+workflows:
+  ios-unsigned:
+    name: iOS unsigned IPA (free sideload)
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    environment:
+      # 与本地开发环境一致；若 Codemagic 镜像尚未提供 3.47.9，改成 stable。
+      flutter: 3.47.9
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Flutter pub get
+        script: flutter pub get
+      - name: Analyze
+        script: flutter analyze
+      - name: Run tests
+        script: flutter test
+      - name: Build unsigned app
+        script: flutter build ios --release --no-codesign
+      - name: Package unsigned IPA
+        script: |
+          cd build/ios/iphoneos
+          rm -rf Payload TL-unsigned.ipa
+          mkdir -p Payload
+          cp -R Runner.app Payload/
+          zip -qry TL-unsigned.ipa Payload
+          ls -lh TL-unsigned.ipa
+    artifacts:
+      - build/ios/iphoneos/TL-unsigned.ipa
+    # 不配置 triggering：只在 Codemagic 界面手动触发，避免消耗免费额度。

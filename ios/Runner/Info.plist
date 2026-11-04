@@ -12,6 +12,8 @@
 	<string>用于扫描并连接 TL 温湿度记录仪，读取与配置设备参数。</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>用于连接 TL 温湿度记录仪并读取历史记录。</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
